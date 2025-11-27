@@ -1,0 +1,30 @@
+/* SIP Protocol brand colors */
+:root {
+  --sl-color-accent-low: #1a1f35;
+  --sl-color-accent: #6366f1;
+  --sl-color-accent-high: #a5b4fc;
+  --sl-color-white: #ffffff;
+  --sl-color-gray-1: #eceef2;
+  --sl-color-gray-2: #c0c2c7;
+  --sl-color-gray-3: #888b96;
+  --sl-color-gray-4: #545861;
+  --sl-color-gray-5: #353841;
+  --sl-color-gray-6: #24272f;
+  --sl-color-black: #17181c;
+}
+
+:root[data-theme='light'] {
+  --sl-color-accent-low: #e0e7ff;
+  --sl-color-accent: #4f46e5;
+  --sl-color-accent-high: #312e81;
+}
+
+/* Code block styling */
+.sl-markdown-content pre {
+  border-radius: 0.5rem;
+}
+
+/* Improve table readability */
+.sl-markdown-content table {
+  font-size: 0.9rem;
+}

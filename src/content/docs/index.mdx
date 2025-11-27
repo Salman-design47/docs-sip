@@ -1,0 +1,89 @@
+---
+title: SIP Protocol Documentation
+description: Privacy layer for cross-chain transactions via NEAR Intents + Zcash
+template: splash
+hero:
+  tagline: One toggle to shield sender, amount, and recipient in cross-chain swaps
+  image:
+    file: ../../assets/logo-light.svg
+  actions:
+    - text: Get Started
+      link: /getting-started/
+      icon: right-arrow
+    - text: View on GitHub
+      link: https://github.com/sip-protocol
+      icon: external
+      variant: minimal
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+## What is SIP?
+
+**Shielded Intents Protocol** enables private cross-chain swaps using stealth addresses, Pedersen commitments, and viewing keys for compliance.
+
+<CardGrid stagger>
+  <Card title="Stealth Addresses" icon="approve-check">
+    Generate unique, one-time recipient addresses that cannot be linked to your identity
+  </Card>
+  <Card title="Hidden Amounts" icon="pencil">
+    Transaction amounts are cryptographically committed, invisible to observers
+  </Card>
+  <Card title="Compliant Privacy" icon="setting">
+    Selective disclosure via viewing keys enables audit and regulatory compliance
+  </Card>
+  <Card title="Cross-Chain" icon="rocket">
+    Works across Ethereum, Solana, NEAR, Zcash, and more via NEAR Intents
+  </Card>
+</CardGrid>
+
+## Quick Install
+
+```bash
+npm install @sip-protocol/sdk
+```
+
+```typescript
+import { SIP, PrivacyLevel } from '@sip-protocol/sdk'
+
+const sip = new SIP({ network: 'testnet' })
+
+const intent = await sip
+  .intent()
+  .input('solana', 'SOL', 1_000_000_000n)
+  .output('ethereum', 'ETH')
+  .privacy(PrivacyLevel.SHIELDED)
+  .build()
+```
+
+## Privacy Levels
+
+| Level | Sender | Amount | Recipient | Auditable |
+|-------|--------|--------|-----------|-----------|
+| `TRANSPARENT` | Visible | Visible | Visible | N/A |
+| `SHIELDED` | Hidden | Hidden | Hidden | No |
+| `COMPLIANT` | Hidden | Hidden | Hidden | Yes |
+
+## Architecture
+
+```
+User Intent → Privacy Layer (SIP) → NEAR Intents → Multi-chain Settlement
+
+┌─────────────────────────────────────────────────────────────┐
+│  PRIVACY LAYER (SIP)                                        │
+│  • Pedersen Commitments  • Stealth Addresses                │
+│  • Viewing Keys          • Shielded Intents                 │
+├─────────────────────────────────────────────────────────────┤
+│  SETTLEMENT LAYER (NEAR Intents + Chain Signatures)         │
+├─────────────────────────────────────────────────────────────┤
+│  BLOCKCHAIN LAYER                                           │
+│  • NEAR  • Ethereum  • Solana  • Zcash  • Bitcoin          │
+└─────────────────────────────────────────────────────────────┘
+```
+
+## Current Status
+
+- 741 tests passing
+- TypeScript SDK published to npm
+- Production-ready core primitives
+- Demo at [sip-protocol.org](https://sip-protocol.org)

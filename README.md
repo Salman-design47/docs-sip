@@ -1,64 +1,49 @@
-# docs-sip
+# Starlight Starter Kit: Basics
 
-> Official SIP Protocol Documentation — https://docs.sip-protocol.org
-
----
-
-## Overview
-
-This repository contains the documentation for **SIP Protocol** (Shielded Intents Protocol), a privacy layer for cross-chain transactions.
-
-## Tech Stack
-
-- **Framework:** [Astro](https://astro.build/) + [Starlight](https://starlight.astro.build/)
-- **Deployment:** Cloudflare Pages
-- **Domain:** docs.sip-protocol.org
-
-## Structure (Planned)
+[![Built with Starlight](https://astro.badg.es/v2/built-with-starlight/tiny.svg)](https://starlight.astro.build)
 
 ```
-docs-sip/
-├── src/
-│   ├── content/
-│   │   ├── docs/
-│   │   │   ├── getting-started/
-│   │   │   ├── guides/
-│   │   │   ├── api/
-│   │   │   └── concepts/
-│   │   └── config.ts
-│   └── pages/
+npm create astro@latest -- --template starlight
+```
+
+> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+
+## 🚀 Project Structure
+
+Inside of your Astro + Starlight project, you'll see the following folders and files:
+
+```
+.
 ├── public/
+├── src/
+│   ├── assets/
+│   ├── content/
+│   │   └── docs/
+│   └── content.config.ts
 ├── astro.config.mjs
-└── package.json
+├── package.json
+└── tsconfig.json
 ```
 
-## Content Sections
+Starlight looks for `.md` or `.mdx` files in the `src/content/docs/` directory. Each file is exposed as a route based on its file name.
 
-| Section | Description |
-|---------|-------------|
-| **Getting Started** | Installation, quick start, first intent |
-| **Guides** | Privacy levels, viewing keys, compliance |
-| **API Reference** | SDK methods, types, interfaces |
-| **Concepts** | Stealth addresses, commitments, proofs |
+Images can be added to `src/assets/` and embedded in Markdown with a relative link.
 
-## Development
+Static assets, like favicons, can be placed in the `public/` directory.
 
-```bash
-# Install dependencies
-pnpm install
+## 🧞 Commands
 
-# Start dev server
-pnpm dev
+All commands are run from the root of the project, from a terminal:
 
-# Build for production
-pnpm build
-```
+| Command                   | Action                                           |
+| :------------------------ | :----------------------------------------------- |
+| `npm install`             | Installs dependencies                            |
+| `npm run dev`             | Starts local dev server at `localhost:4321`      |
+| `npm run build`           | Build your production site to `./dist/`          |
+| `npm run preview`         | Preview your build locally, before deploying     |
+| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
+| `npm run astro -- --help` | Get help using the Astro CLI                     |
 
-## Related
+## 👀 Want to learn more?
 
-- [sip-protocol](https://github.com/sip-protocol/sip-protocol) - Core SDK
-- [sip-protocol.org](https://sip-protocol.org) - Marketing site
-
----
-
-*Part of the [SIP Protocol](https://github.com/sip-protocol) ecosystem*
+Check out [Starlight’s docs](https://starlight.astro.build/), read [the Astro documentation](https://docs.astro.build), or jump into the [Astro Discord server](https://astro.build/chat).
