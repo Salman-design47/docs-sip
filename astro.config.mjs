@@ -16,7 +16,7 @@ export default defineConfig({
       },
       social: [
         { icon: 'github', label: 'GitHub', href: 'https://github.com/sip-protocol' },
-        { icon: 'x.com', label: 'Twitter', href: 'https://x.com/sip_protocol' },
+        { icon: 'x.com', label: 'Twitter', href: 'https://x.com/rz1989sol' },
       ],
       editLink: {
         baseUrl: 'https://github.com/sip-protocol/docs-sip/edit/main/',
