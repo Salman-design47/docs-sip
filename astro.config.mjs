@@ -79,6 +79,7 @@ export default defineConfig({
         {
           label: 'Resources',
           items: [
+            { label: 'Roadmap', slug: 'roadmap' },
             { label: 'Whitepaper', slug: 'whitepaper' },
           ],
         },
