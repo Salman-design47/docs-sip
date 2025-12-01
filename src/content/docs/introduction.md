@@ -17,7 +17,7 @@ Cross-chain transactions have become fundamental to decentralized finance, yet t
 
 Even when using privacy-preserving systems like Zcash, interacting with transparent blockchains through address reuse destroys privacy guarantees.
 
-### The ZachXBT Vulnerability
+### The Transparency Vulnerability
 
 Consider a user with shielded ZEC wanting to swap to SOL:
 

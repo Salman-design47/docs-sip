@@ -33,7 +33,7 @@ Blockchain transparency creates significant privacy concerns:
 
 Intent-based systems like NEAR Intents simplify cross-chain operations but don't address privacy. Users still reveal addresses, amounts, and counterparties.
 
-### 1.2 The ZachXBT Vulnerability
+### 1.2 The Transparency Vulnerability
 
 ```
 Current Flow:
