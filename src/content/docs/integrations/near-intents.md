@@ -7,6 +7,11 @@ description: Integration with NEAR Intents settlement layer
 
 SIP integrates with NEAR Intents for cross-chain settlement via the 1Click API.
 
+:::caution[Mainnet Only]
+NEAR Intents (1Click API) operates on **mainnet only**. There is no testnet deployment.
+For testing, use `MockSolver` or small mainnet amounts ($5-10).
+:::
+
 ## Architecture
 
 ```
@@ -74,7 +79,7 @@ Full adapter for NEAR Intents integration:
 import { NEARIntentsAdapter, createNEARIntentsAdapter } from '@sip-protocol/sdk'
 
 const adapter = createNEARIntentsAdapter({
-  network: 'testnet',
+  network: 'mainnet',  // NEAR Intents is mainnet-only
   endpoint: 'https://1click.chaindefuser.com'
 })
 
@@ -108,10 +113,13 @@ interface NEARIntentsAdapterConfig {
 
 ### Network Endpoints
 
-| Network | Endpoint |
-|---------|----------|
-| Mainnet | `https://1click.chaindefuser.com` |
-| Testnet | `https://1click-testnet.chaindefuser.com` |
+| Network | Endpoint | Status |
+|---------|----------|--------|
+| Mainnet | `https://1click.chaindefuser.com` | Active |
+
+:::note
+There is no testnet endpoint. NEAR Intents operates on mainnet only.
+:::
 
 ## Supported Chains
 
@@ -132,7 +140,7 @@ SIP adds privacy layer before NEAR Intents settlement:
 ```typescript
 import { SIP, PrivacyLevel } from '@sip-protocol/sdk'
 
-const sip = new SIP({ network: 'testnet' })
+const sip = new SIP({ network: 'mainnet' })
 
 // Create shielded intent
 const intent = await sip
@@ -225,8 +233,8 @@ NEAR Chain Signatures enable cross-chain execution:
 import { SIP, PrivacyLevel, createEthereumAdapter } from '@sip-protocol/sdk'
 
 async function privateSwap() {
-  // Initialize
-  const sip = new SIP({ network: 'testnet' })
+  // Initialize (mainnet-only for NEAR Intents)
+  const sip = new SIP({ network: 'mainnet' })
 
   // Connect wallet
   const adapter = createEthereumAdapter(window.ethereum)

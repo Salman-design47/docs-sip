@@ -44,13 +44,25 @@ SIP SDK includes full type definitions. No additional `@types` packages needed.
 }
 ```
 
+## Network Requirements
+
+:::caution[NEAR Intents is Mainnet Only]
+The NEAR Intents (1Click API) operates on **mainnet only**. There is no testnet deployment.
+
+**For development/testing:**
+- Use `MockSolver` for unit tests
+- Use small mainnet amounts ($5-10) for integration testing
+- Individual chains (Solana, Ethereum, NEAR) have testnets for wallet testing
+:::
+
 ## Your First Shielded Intent
 
 ```typescript
 import { SIP, PrivacyLevel } from '@sip-protocol/sdk'
 
 // 1. Initialize the SDK
-const sip = new SIP({ network: 'testnet' })
+// Note: NEAR Intents is mainnet-only (no testnet)
+const sip = new SIP({ network: 'mainnet' })
 
 // 2. Create a shielded intent using the builder pattern
 const intent = await sip
