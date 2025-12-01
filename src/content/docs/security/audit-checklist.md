@@ -262,7 +262,7 @@ const bytes = crypto.getRandomValues(new Uint8Array(32))
 
 #### 9.2 Memory
 
-- [ ] Keys zeroized after use (TODO - not implemented)
+- [ ] Keys zeroized after use (implemented v0.1.1)
 - [ ] No heap spraying vulnerabilities
 - [ ] Garbage collection considerations
 

@@ -244,15 +244,56 @@ if (isMine) {
 }
 ```
 
+## Supported Curves
+
+SIP supports multiple elliptic curves to enable stealth addresses across different blockchain ecosystems:
+
+| Curve | Chains | Notes |
+|-------|--------|-------|
+| **secp256k1** | Ethereum, Bitcoin, Zcash | Default for EVM chains |
+| **ed25519** | Solana, NEAR | Required for Solana/NEAR address derivation |
+
+### Curve Selection
+
+```typescript
+// secp256k1 (default) - for Ethereum, Bitcoin, Zcash
+const ethMeta = generateStealthMetaAddress('ethereum')
+const btcMeta = generateStealthMetaAddress('bitcoin')
+
+// ed25519 - for Solana, NEAR
+const solMeta = generateStealthMetaAddress('solana', { curve: 'ed25519' })
+const nearMeta = generateStealthMetaAddress('near', { curve: 'ed25519' })
+```
+
+### Curve Differences
+
+| Aspect | secp256k1 | ed25519 |
+|--------|-----------|---------|
+| Key size | 32 bytes | 32 bytes |
+| Signature | ECDSA | EdDSA |
+| Speed | Fast | Faster |
+| EVM compatible | Yes | No |
+| Solana compatible | No | Yes |
+
+### Chain-Specific Address Derivation
+
+| Chain | Curve | Derivation |
+|-------|-------|------------|
+| Ethereum | secp256k1 | `keccak256(pubkey)[12:32]` |
+| Bitcoin | secp256k1 | `hash160(pubkey)` + version |
+| Zcash (t-addr) | secp256k1 | `hash160(pubkey)` + version |
+| Solana | ed25519 | Raw 32-byte pubkey (base58) |
+| NEAR | ed25519 | `ed25519:` + base58 pubkey |
+
 ## EIP-5564 Compatibility
 
 SIP stealth addresses align with EIP-5564:
 
 | Aspect | EIP-5564 | SIP |
 |--------|----------|-----|
-| Curve | secp256k1 | secp256k1 |
+| Curve | secp256k1 | secp256k1 + ed25519 |
 | Key structure | (P, Q) | (P, Q) |
-| Shared secret | ECDH | ECDH |
+| Shared secret | ECDH | ECDH / X25519 |
 | View tag | 1 byte | 1 byte |
 
-**Extension**: SIP adds multi-chain support via `sip:` URI scheme.
+**Extensions**: SIP adds multi-chain support via `sip:` URI scheme and ed25519 for non-EVM chains.

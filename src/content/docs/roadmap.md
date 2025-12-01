@@ -12,7 +12,7 @@ SIP Protocol is building the **privacy standard for Web3** — like HTTPS for th
 - **Phase**: 1 of 3 (Foundation)
 - **Progress**: 95% complete
 - **Milestone**: M8 - Production Hardening
-- **Tests**: 867+ passing (745 SDK + 122 Demo)
+- **Tests**: 837+ passing (745 SDK + 92 Demo)
 - **Live**: [sip-protocol.org](https://sip-protocol.org)
 
 ## Phases Overview
