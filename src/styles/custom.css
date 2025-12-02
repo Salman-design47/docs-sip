@@ -48,3 +48,14 @@ a:hover {
   --sl-color-bg-badge: #22c55e20;
   --sl-color-border-badge: #22c55e;
 }
+
+/* Hide default Starlight hero on homepage (we use custom Hero component) */
+.page [data-page-title=""] {
+  display: none;
+}
+
+/* Hide empty default hero container on splash pages */
+.hero:has(h1:empty),
+.hero:has(h1[data-page-title=""]) {
+  display: none !important;
+}
