@@ -3,6 +3,18 @@ title: Funding Proof
 description: Zero-knowledge proof of sufficient funds
 ---
 
+import { Badge, Card } from '@astrojs/starlight/components'
+
+<div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+  <Badge text="Planned" variant="caution" />
+  <Badge text="Noir" variant="note" />
+  <Badge text="~50 constraints" variant="tip" />
+</div>
+
+<Card title="TL;DR">
+Proves user has sufficient balance to cover a transaction **without revealing the actual balance**. Uses Pedersen commitments to hide amounts while proving `balance >= minimum`.
+</Card>
+
 # Funding Proof Specification
 
 The Funding Proof demonstrates that a user has sufficient balance to cover a transaction without revealing the actual balance.
@@ -58,14 +70,21 @@ fn main(
 
 ## Workflow
 
-```
-1. User has balance: 1000 tokens
-2. User wants to send: 500 tokens
-3. User creates commitment: C = Pedersen(500, random_blinding)
-4. User generates proof:
-   - Public: hash(C), min=500
-   - Private: balance=1000, blinding=random
-5. Verifier confirms: "User has at least 500 tokens"
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant SDK as SIP SDK
+    participant V as Verifier
+
+    Note over U: Has 1000 tokens, wants to send 500
+
+    U->>SDK: Create commitment C = Pedersen(500, blinding)
+    SDK->>SDK: Generate ZK proof
+    Note right of SDK: Public: hash(C), min=500<br/>Private: balance=1000, blinding
+
+    SDK->>V: Submit proof + public inputs
+    V->>V: Verify proof
+    V-->>U: Confirmed: "Has at least 500 tokens"
 ```
 
 ## Security Properties

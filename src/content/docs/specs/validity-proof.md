@@ -3,6 +3,18 @@ title: Validity Proof
 description: Zero-knowledge proof of intent authorization
 ---
 
+import { Badge, Card } from '@astrojs/starlight/components'
+
+<div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+  <Badge text="Planned" variant="caution" />
+  <Badge text="Noir" variant="note" />
+  <Badge text="~150 constraints" variant="tip" />
+</div>
+
+<Card title="TL;DR">
+Proves an intent was authorized by a legitimate sender **without revealing their identity**. Uses ECDSA signature verification inside the circuit to prove "someone with spending authority signed this."
+</Card>
+
 # Validity Proof Specification
 
 The Validity Proof demonstrates that an intent was authorized by a legitimate sender without revealing their identity.
@@ -80,15 +92,22 @@ fn main(
 
 ## Workflow
 
-```
-1. User wants to create shielded intent
-2. User has address: 0xABC...
-3. User creates sender commitment: C = Pedersen(hash(0xABC), blinding)
-4. User signs intent_hash with their private key
-5. User generates validity proof:
-   - Public: intent_hash, C
-   - Private: address=0xABC, signature, blinding
-6. Verifier confirms: "Someone authorized this intent"
+```mermaid
+sequenceDiagram
+    participant U as User (0xABC...)
+    participant SDK as SIP SDK
+    participant V as Verifier
+
+    Note over U: Wants shielded intent
+
+    U->>SDK: Create sender commitment<br/>C = Pedersen(hash(0xABC), blinding)
+    U->>SDK: Sign intent_hash with private key
+    SDK->>SDK: Generate validity proof
+    Note right of SDK: Public: intent_hash, C<br/>Private: address, signature, blinding
+
+    SDK->>V: Submit proof + public inputs
+    V->>V: Verify proof
+    V-->>U: Confirmed: "Someone authorized this"
 ```
 
 ## Security Properties
@@ -101,12 +120,18 @@ fn main(
 
 ## Relationship to Other Proofs
 
-```
-Funding Proof: "I have enough funds"
-        +
-Validity Proof: "I authorized this intent"
-        =
-Complete Authorization: "I can make this swap"
+```mermaid
+flowchart LR
+    FP["Funding Proof<br/>'I have enough funds'"]
+    VP["Validity Proof<br/>'I authorized this'"]
+    CA["Complete Authorization<br/>'I can make this swap'"]
+
+    FP --> CA
+    VP --> CA
+
+    style FP fill:#4c1d95,stroke:#a78bfa
+    style VP fill:#4c1d95,stroke:#a78bfa
+    style CA fill:#22c55e,stroke:#86efac,stroke-width:2px
 ```
 
 ## Integration with SDK

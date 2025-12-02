@@ -11,25 +11,46 @@ Stealth addresses provide **recipient privacy** by generating unique, one-time a
 
 In current cross-chain swaps:
 
-```
-User has: shielded ZEC in z-address
-User swaps: ZEC → SOL via intent
-Refund goes to: t1ABC... (transparent, reused)
+```mermaid
+flowchart LR
+    A["Shielded ZEC<br/>(z-address)"] --> B["Swap Intent"]
+    B --> C["Refund to t1ABC..."]
+    C --> D["Chain Analysis"]
+    D --> E["Links 50 transactions!"]
 
-Chain analysis: "t1ABC received refunds 50 times"
-               → Links to shielded activity
+    style A fill:#22c55e,stroke:#86efac
+    style C fill:#ef4444,stroke:#f87171,stroke-width:2px
+    style D fill:#ef4444,stroke:#f87171
+    style E fill:#ef4444,stroke:#f87171
 ```
+
+Reused addresses reveal transaction patterns.
 
 ## The Solution
 
 With SIP stealth addresses:
 
-```
-Each swap: generates fresh stealth address
-Refund goes to: unique stealth_1, stealth_2, stealth_3...
+```mermaid
+flowchart LR
+    subgraph Swaps["Each Swap"]
+        A1["Swap 1"] --> S1["stealth_1"]
+        A2["Swap 2"] --> S2["stealth_2"]
+        A3["Swap 3"] --> S3["stealth_3"]
+    end
 
-Chain analysis: "No pattern - each address used once"
+    S1 --> D["Chain Analysis"]
+    S2 --> D
+    S3 --> D
+    D --> E["No pattern found"]
+
+    style S1 fill:#4c1d95,stroke:#a78bfa
+    style S2 fill:#4c1d95,stroke:#a78bfa
+    style S3 fill:#4c1d95,stroke:#a78bfa
+    style D fill:#312e81,stroke:#8b5cf6
+    style E fill:#22c55e,stroke:#86efac,stroke-width:2px
 ```
+
+Each transaction uses a unique, unlinkable address.
 
 ## How It Works
 
@@ -43,6 +64,32 @@ Chain analysis: "No pattern - each address used once"
 | Viewing public key | Q = q·G | In meta-address |
 | Ephemeral key | r, R | Per-transaction |
 | Stealth key | a, A | One-time address |
+
+### Stealth Address Flow
+
+```mermaid
+sequenceDiagram
+    participant R as Recipient
+    participant S as Sender
+    participant B as Blockchain
+
+    Note over R: Step 1: Setup
+    R->>R: Generate spending key (p, P)
+    R->>R: Generate viewing key (q, Q)
+    R-->>S: Share meta-address (P, Q)
+
+    Note over S: Step 2: Send
+    S->>S: Generate ephemeral key (r, R)
+    S->>S: Compute stealth address A
+    S->>B: Send to stealth address
+    S->>B: Publish R (ephemeral public)
+
+    Note over R: Step 3: Scan & Claim
+    R->>B: Scan for R values
+    R->>R: Check if address is mine
+    R->>R: Derive private key
+    R->>B: Claim funds
+```
 
 ### Step 1: Recipient Generates Meta-Address
 

@@ -9,51 +9,65 @@ SIP Protocol operates as an application layer between user applications and the 
 
 ## System Overview
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                      APPLICATION LAYER                          │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐              │
-│  │   DApps     │  │   Wallets   │  │    DAOs     │              │
-│  └──────┬──────┘  └──────┬──────┘  └──────┬──────┘              │
-│         │                │                │                      │
-│         └────────────────┼────────────────┘                      │
-│                          ▼                                       │
-│  ┌───────────────────────────────────────────────────────────┐  │
-│  │                    @sip-protocol/sdk                       │  │
-│  │  ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────────────┐  │  │
-│  │  │ Intent  │ │ Stealth │ │ Privacy │ │ Wallet Adapters │  │  │
-│  │  │ Builder │ │ Address │ │ Manager │ │ (ETH/SOL/NEAR)  │  │  │
-│  │  └─────────┘ └─────────┘ └─────────┘ └─────────────────┘  │  │
-│  └───────────────────────────────────────────────────────────┘  │
-│                          │                                       │
-├──────────────────────────┼───────────────────────────────────────┤
-│                   PRIVACY LAYER (SIP)                            │
-│  ┌───────────────────────┴───────────────────────────────────┐  │
-│  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────────┐ │  │
-│  │  │   Pedersen   │  │   Stealth    │  │   Viewing Keys   │ │  │
-│  │  │ Commitments  │  │  Addresses   │  │  (Compliance)    │ │  │
-│  │  └──────────────┘  └──────────────┘  └──────────────────┘ │  │
-│  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────────┐ │  │
-│  │  │   Funding    │  │   Validity   │  │   Fulfillment    │ │  │
-│  │  │    Proof     │  │    Proof     │  │     Proof        │ │  │
-│  │  └──────────────┘  └──────────────┘  └──────────────────┘ │  │
-│  └───────────────────────────────────────────────────────────┘  │
-│                          │                                       │
-├──────────────────────────┼───────────────────────────────────────┤
-│                   SETTLEMENT LAYER                               │
-│  ┌───────────────────────┴───────────────────────────────────┐  │
-│  │              NEAR Intents + Chain Signatures               │  │
-│  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────────┐ │  │
-│  │  │  1Click API  │  │   Solvers    │  │ Chain Signatures │ │  │
-│  │  └──────────────┘  └──────────────┘  └──────────────────┘ │  │
-│  └───────────────────────────────────────────────────────────┘  │
-│                          │                                       │
-├──────────────────────────┼───────────────────────────────────────┤
-│                    BLOCKCHAIN LAYER                              │
-│  ┌────────┐  ┌────────┐  ┌────────┐  ┌────────┐  ┌────────┐    │
-│  │  NEAR  │  │  ETH   │  │ Solana │  │ Zcash  │  │Bitcoin │    │
-│  └────────┘  └────────┘  └────────┘  └────────┘  └────────┘    │
-└─────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TB
+    subgraph APP["Application Layer"]
+        direction LR
+        DApps["DApps"]
+        Wallets["Wallets"]
+        DAOs["DAOs"]
+    end
+
+    subgraph SDK["@sip-protocol/sdk"]
+        direction LR
+        IB["Intent Builder"]
+        SA["Stealth Address"]
+        PM["Privacy Manager"]
+        WA["Wallet Adapters"]
+    end
+
+    subgraph PRIVACY["Privacy Layer (SIP)"]
+        direction TB
+        subgraph Primitives["Cryptographic Primitives"]
+            direction LR
+            PC["Pedersen Commitments"]
+            ST["Stealth Addresses"]
+            VK["Viewing Keys"]
+        end
+        subgraph Proofs["ZK Proofs"]
+            direction LR
+            FP["Funding Proof"]
+            VP["Validity Proof"]
+            FFP["Fulfillment Proof"]
+        end
+    end
+
+    subgraph SETTLE["Settlement Layer"]
+        direction LR
+        API["1Click API"]
+        Solvers["Solvers"]
+        CS["Chain Signatures"]
+    end
+
+    subgraph CHAINS["Blockchain Layer"]
+        direction LR
+        NEAR["NEAR"]
+        ETH["Ethereum"]
+        SOL["Solana"]
+        ZEC["Zcash"]
+        BTC["Bitcoin"]
+    end
+
+    APP --> SDK
+    SDK --> PRIVACY
+    PRIVACY --> SETTLE
+    SETTLE --> CHAINS
+
+    style APP fill:#1e1b4b,stroke:#8b5cf6,stroke-width:2px
+    style SDK fill:#312e81,stroke:#8b5cf6,stroke-width:2px
+    style PRIVACY fill:#4c1d95,stroke:#a78bfa,stroke-width:3px
+    style SETTLE fill:#312e81,stroke:#8b5cf6,stroke-width:2px
+    style CHAINS fill:#1e1b4b,stroke:#8b5cf6,stroke-width:2px
 ```
 
 ## SDK Components
@@ -105,30 +119,42 @@ ZK proof generation interfaces:
 
 ### Transparent Flow
 
-```
-User Intent → Standard intent → Solver → Settlement
+```mermaid
+flowchart LR
+    A["User Intent"] --> B["Standard Intent"] --> C["Solver"] --> D["Settlement"]
+    style A fill:#1e1b4b,stroke:#8b5cf6
+    style B fill:#1e1b4b,stroke:#8b5cf6
+    style C fill:#1e1b4b,stroke:#8b5cf6
+    style D fill:#1e1b4b,stroke:#8b5cf6
 ```
 
 No privacy features. All data visible on-chain.
 
 ### Shielded Flow
 
-```
-User Intent
-    ↓
-Generate stealth address (recipient privacy)
-    ↓
-Create Pedersen commitments (amount privacy)
-    ↓
-Generate ZK proofs (funding + validity)
-    ↓
-Submit shielded intent
-    ↓
-Solver fulfills (only sees commitments)
-    ↓
-Fulfillment proof generated
-    ↓
-Settlement to stealth address
+```mermaid
+flowchart TB
+    A["User Intent"] --> B["Generate Stealth Address"]
+    B --> C["Create Pedersen Commitments"]
+    C --> D["Generate ZK Proofs"]
+    D --> E["Submit Shielded Intent"]
+    E --> F["Solver Fulfills"]
+    F --> G["Fulfillment Proof"]
+    G --> H["Settlement to Stealth Address"]
+
+    B -.- B1["Recipient Privacy"]
+    C -.- C1["Amount Privacy"]
+    D -.- D1["Funding + Validity"]
+    F -.- F1["Only sees commitments"]
+
+    style A fill:#4c1d95,stroke:#a78bfa,stroke-width:2px
+    style B fill:#4c1d95,stroke:#a78bfa
+    style C fill:#4c1d95,stroke:#a78bfa
+    style D fill:#4c1d95,stroke:#a78bfa
+    style E fill:#4c1d95,stroke:#a78bfa
+    style F fill:#312e81,stroke:#8b5cf6
+    style G fill:#312e81,stroke:#8b5cf6
+    style H fill:#22c55e,stroke:#86efac,stroke-width:2px
 ```
 
 ### Compliant Flow
@@ -137,6 +163,22 @@ Same as shielded, plus:
 - Encrypt transaction metadata with viewing key
 - Auditor can decrypt specific transactions
 - ViewingProof for audit reports
+
+```mermaid
+flowchart TB
+    A["Shielded Intent"] --> B["Encrypt with Viewing Key"]
+    B --> C["Store Encrypted Metadata"]
+    C --> D["Auditor Requests Access"]
+    D --> E["Decrypt with Viewing Key"]
+    E --> F["Generate ViewingProof"]
+
+    style A fill:#4c1d95,stroke:#a78bfa
+    style B fill:#4c1d95,stroke:#a78bfa
+    style C fill:#312e81,stroke:#8b5cf6
+    style D fill:#312e81,stroke:#8b5cf6
+    style E fill:#22c55e,stroke:#86efac
+    style F fill:#22c55e,stroke:#86efac
+```
 
 ## Cryptographic Components
 

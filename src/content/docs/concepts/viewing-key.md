@@ -19,27 +19,50 @@ Viewing keys enable **selective disclosure** of shielded transaction details to 
 
 ## Privacy Model
 
-```
-Full Privacy (Shielded):     Only user sees transactions
-Selective Disclosure:        User + authorized viewers see specific txs
-Compliant Mode:             User + designated auditor see all txs
+```mermaid
+flowchart LR
+    subgraph Full["Full Privacy (Shielded)"]
+        U1["User"] --> T1["Transactions"]
+    end
+
+    subgraph Selective["Selective Disclosure"]
+        U2["User"] --> T2["Transactions"]
+        V2["Authorized Viewer"] --> T2
+    end
+
+    subgraph Compliant["Compliant Mode"]
+        U3["User"] --> T3["All Transactions"]
+        A3["Auditor"] --> T3
+    end
+
+    style Full fill:#4c1d95,stroke:#a78bfa,stroke-width:2px
+    style Selective fill:#312e81,stroke:#8b5cf6
+    style Compliant fill:#1e1b4b,stroke:#8b5cf6
 ```
 
 ## Key Hierarchy
 
-```
-User Seed
-    │
-    └── Master Viewing Key (MVK)
-            │
-            ├── Full Viewing Key (FVK)
-            │       └── Sees ALL transactions
-            │
-            ├── Auditor Key (AK)
-            │       └── Sees ALL txs, time-limited
-            │
-            └── Transaction Viewing Keys (TVK)
-                    └── Sees SINGLE transaction
+```mermaid
+flowchart TB
+    SEED["User Seed"] --> MVK["Master Viewing Key (MVK)"]
+
+    MVK --> FVK["Full Viewing Key (FVK)"]
+    MVK --> AK["Auditor Key (AK)"]
+    MVK --> TVK["Transaction Viewing Keys (TVK)"]
+
+    FVK --> FVK_DESC["Sees ALL transactions"]
+    AK --> AK_DESC["Sees ALL txs, time-limited"]
+    TVK --> TVK_DESC["Sees SINGLE transaction"]
+
+    style SEED fill:#1e1b4b,stroke:#8b5cf6
+    style MVK fill:#4c1d95,stroke:#a78bfa,stroke-width:2px
+    style FVK fill:#ef4444,stroke:#f87171
+    style AK fill:#f59e0b,stroke:#fbbf24
+    style TVK fill:#22c55e,stroke:#86efac
+
+    style FVK_DESC fill:none,stroke:none
+    style AK_DESC fill:none,stroke:none
+    style TVK_DESC fill:none,stroke:none
 ```
 
 ### Master Viewing Key (MVK)
@@ -205,28 +228,47 @@ await revokeViewingKey(grantId)
 
 ## Workflow: Compliant Mode
 
-```
-1. User sets privacy_level = COMPLIANT
-2. User pre-shares auditor_key with designated auditor
-3. For each transaction:
-   a. Encrypt tx_data with auditor_key
-   b. Store encrypted blob with intent
-   c. Auditor can decrypt at any time
-4. If audit requested:
-   a. Auditor decrypts all transactions
-   b. Auditor generates ViewingProofs for report
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant SIP as SIP Protocol
+    participant A as Auditor
+
+    U->>SIP: Set privacy_level = COMPLIANT
+    U->>A: Pre-share auditor_key
+
+    loop For Each Transaction
+        U->>SIP: Create shielded intent
+        SIP->>SIP: Encrypt tx_data with auditor_key
+        SIP->>SIP: Store encrypted blob
+    end
+
+    Note over A: Audit Requested
+    A->>SIP: Request transaction data
+    SIP->>A: Return encrypted blobs
+    A->>A: Decrypt with auditor_key
+    A->>A: Generate ViewingProofs
+    A->>U: Provide audit report
 ```
 
 ## Workflow: Selective Disclosure
 
-```
-1. User has shielded transaction
-2. Dispute arises, need to prove transaction
-3. User derives TVK for specific intent
-4. User shares TVK with arbiter
-5. Arbiter decrypts ONLY that transaction
-6. Arbiter generates ViewingProof
-7. Dispute resolved with cryptographic proof
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant ARB as Arbiter
+    participant SIP as SIP Protocol
+
+    Note over U: Dispute arises
+    U->>U: Has shielded transaction
+    U->>U: Derive TVK for specific intent
+    U->>ARB: Share TVK
+
+    ARB->>SIP: Request encrypted tx
+    SIP->>ARB: Return encrypted data
+    ARB->>ARB: Decrypt with TVK
+    ARB->>ARB: Generate ViewingProof
+    ARB->>U: Dispute resolved
 ```
 
 ## Code Example

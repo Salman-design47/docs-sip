@@ -140,33 +140,35 @@ Noir provides built-in support for:
 
 ## Architecture
 
-```
-┌────────────────────────────────────────┐
-│           SDK (TypeScript)              │
-│  ┌──────────────────────────────────┐  │
-│  │         ProofProvider            │  │
-│  │  ┌────────────┐ ┌─────────────┐  │  │
-│  │  │MockProvider│ │NoirProvider │  │  │
-│  │  └────────────┘ └─────────────┘  │  │
-│  └──────────────────────────────────┘  │
-│                   │                     │
-└───────────────────┼─────────────────────┘
-                    │
-        ┌───────────┴───────────┐
-        │                       │
-        ▼                       ▼
-┌───────────────┐       ┌───────────────┐
-│  Mock Proofs  │       │  Noir/NoirJS  │
-│  (Testing)    │       │  (Production) │
-└───────────────┘       └───────────────┘
-                              │
-                    ┌─────────┴─────────┐
-                    │                   │
-                    ▼                   ▼
-              ┌──────────┐        ┌──────────┐
-              │UltraPlonk│        │  Groth16 │
-              │ Backend  │        │ Backend  │
-              └──────────┘        └──────────┘
+```mermaid
+flowchart TB
+    subgraph SDK["SDK (TypeScript)"]
+        subgraph PP["ProofProvider Interface"]
+            Mock["MockProvider"]
+            Noir["NoirProvider"]
+        end
+    end
+
+    SDK --> TestPath
+    SDK --> ProdPath
+
+    subgraph TestPath["Testing Path"]
+        MockProofs["Mock Proofs<br/>(Testing)"]
+    end
+
+    subgraph ProdPath["Production Path"]
+        NoirJS["Noir / NoirJS<br/>(Production)"]
+    end
+
+    NoirJS --> UP["UltraPlonk Backend"]
+    NoirJS --> G16["Groth16 Backend"]
+
+    style SDK fill:#312e81,stroke:#8b5cf6,stroke-width:2px
+    style PP fill:#4c1d95,stroke:#a78bfa
+    style TestPath fill:#1e1b4b,stroke:#8b5cf6
+    style ProdPath fill:#4c1d95,stroke:#a78bfa,stroke-width:2px
+    style UP fill:#22c55e,stroke:#86efac
+    style G16 fill:#22c55e,stroke:#86efac
 ```
 
 ## SDK Integration

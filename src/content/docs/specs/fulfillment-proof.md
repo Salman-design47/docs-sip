@@ -3,6 +3,18 @@ title: Fulfillment Proof
 description: Zero-knowledge proof of correct swap execution
 ---
 
+import { Badge, Card } from '@astrojs/starlight/components'
+
+<div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+  <Badge text="Planned" variant="caution" />
+  <Badge text="Noir" variant="note" />
+  <Badge text="~80 constraints" variant="tip" />
+</div>
+
+<Card title="TL;DR">
+Proves a solver correctly executed a swap **without revealing the exact amount or transaction path**. Verifies delivery to the correct stealth address and that output meets minimum requirements.
+</Card>
+
 # Fulfillment Proof Specification
 
 The Fulfillment Proof demonstrates that a solver correctly executed a swap without revealing transaction details.
@@ -71,14 +83,24 @@ fn main(
 
 ## Workflow
 
-```
-1. Solver accepts intent with min_output=100 ZEC
-2. Solver executes swap, delivers 105 ZEC
-3. Solver creates output commitment: C = Pedersen(105, blinding)
-4. Solver generates fulfillment proof:
-   - Public: intent_id, C, min=100, stealth_addr
-   - Private: amount=105, blinding, tx_hash
-5. Protocol verifies: "Solver delivered at least 100 ZEC"
+```mermaid
+sequenceDiagram
+    participant S as Solver
+    participant Chain as Blockchain
+    participant P as Protocol
+
+    Note over S: Accepts intent<br/>min_output = 100 ZEC
+
+    S->>Chain: Execute swap
+    Chain-->>S: Delivered 105 ZEC
+
+    S->>S: Create commitment<br/>C = Pedersen(105, blinding)
+    S->>S: Generate fulfillment proof
+    Note right of S: Public: intent_id, C, min=100<br/>Private: amount=105, blinding
+
+    S->>P: Submit proof
+    P->>P: Verify proof
+    P-->>S: Confirmed: "Delivered >= 100 ZEC"
 ```
 
 ## Security Properties
@@ -91,21 +113,19 @@ fn main(
 
 ## Solver Workflow
 
-```
-User Intent               Solver                    Protocol
-    │                        │                          │
-    ├──────Submit───────────►│                          │
-    │                        │                          │
-    │                    Execute swap                   │
-    │                        │                          │
-    │                   Generate proof                  │
-    │                        │                          │
-    │                        ├──────Fulfillment────────►│
-    │                        │      + Proof             │
-    │                        │                          │
-    │                        │◄─────Verified────────────┤
-    │                        │                          │
-    │◄────Settlement─────────┤                          │
+```mermaid
+sequenceDiagram
+    participant U as User Intent
+    participant S as Solver
+    participant P as Protocol
+
+    U->>S: Submit intent
+    S->>S: Execute swap
+    S->>S: Generate proof
+    S->>P: Fulfillment + Proof
+    P->>P: Verify
+    P-->>S: Verified
+    S-->>U: Settlement complete
 ```
 
 ## Integration with SDK
