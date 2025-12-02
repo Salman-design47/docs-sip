@@ -87,6 +87,10 @@ export default defineConfig({
           items: [
             { label: 'Roadmap', slug: 'roadmap' },
             { label: 'Whitepaper', slug: 'whitepaper' },
+            { label: 'FAQ', slug: 'faq' },
+            { label: 'Glossary', slug: 'glossary' },
+            { label: 'Comparison', slug: 'comparison' },
+            { label: 'Changelog', slug: 'changelog' },
           ],
         },
         {
