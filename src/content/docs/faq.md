@@ -277,7 +277,7 @@ Testnet uses:
 Not yet. We are actively preparing for audit:
 
 - Internal review complete
-- Test coverage: 745+ tests
+- Test coverage: 1,293+ tests
 - Threat model documented
 - Seeking qualified auditors
 

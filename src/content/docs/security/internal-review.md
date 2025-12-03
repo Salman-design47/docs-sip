@@ -222,7 +222,7 @@ All sensitive data remains in-memory only.
 
 ```
 Test Suites: 27 passed
-Tests: 741 passed, 2 skipped
+Tests: 1,293 passed, 2 skipped
 Duration: 19.84s
 ```
 

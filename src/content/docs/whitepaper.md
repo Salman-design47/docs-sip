@@ -228,7 +228,7 @@ All libraries are Trail of Bits audited with constant-time implementations.
 SIP demonstrates practical privacy for cross-chain transactions through established cryptographic primitives at the application layer.
 
 **Current status**:
-- 741 passing tests
+- 1,293 passing tests
 - Production-ready SDK
 - Audited dependencies
 

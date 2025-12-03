@@ -41,7 +41,7 @@ This document outlines the security audit preparation for SIP Protocol.
 | Metric | Current | Target |
 |--------|---------|--------|
 | Test Coverage | 89.88% | >90% |
-| Passing Tests | 741/741 | 100% |
+| Passing Tests | 1,293/1,293 | 100% |
 | Type Safety | Strict | Strict |
 | Lint Errors | 0 | 0 |
 
